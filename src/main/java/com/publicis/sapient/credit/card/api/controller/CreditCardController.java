@@ -24,9 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import javax.validation.Valid;
 
 /**
- * @author poonamgupta
- * This controller has two end points for 1 -> to add a new card into the system
- * 2 -> to get all the credit cards
+ * @author poonamgupta This controller has two end points for 1 -> to add a new
+ *         card into the system 2 -> to get all the credit cards
  */
 @Slf4j
 @Controller
@@ -36,18 +35,20 @@ import javax.validation.Valid;
 public class CreditCardController {
 	private final Server server;
 
-	
 	@PostMapping(value = "/card", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<PostResponse> pushData(@Valid @RequestBody CardRequestBody cardRequestBody) {
 
 		log.info("Card information received.");
 		PostResponse postResponse = new PostResponse();
+		HttpStatus status = null;
 		if (server.saveCardDetails(cardRequestBody)) {
 			postResponse.setResponse("Card added successfully");
+			status = HttpStatus.CREATED;
 		} else {
 			postResponse.setResponse("Card was not added");
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
-		return new ResponseEntity<>(postResponse, HttpStatus.CREATED);
+		return new ResponseEntity<>(postResponse, status);
 	}
 
 	@GetMapping(value = "/cards", produces = MediaType.APPLICATION_JSON_VALUE)

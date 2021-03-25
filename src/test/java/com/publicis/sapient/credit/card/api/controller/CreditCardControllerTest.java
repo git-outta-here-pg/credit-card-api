@@ -70,6 +70,19 @@ public class CreditCardControllerTest {
 
 		assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
 	}
+	
+	@Test
+	public void givenValidCreditCardRequest_thenReturn_500() throws Exception {
+		String creditCardRequestJson = objectMapper.writeValueAsString(CARDREQUESTBODY);
+
+		when(serverMock.saveCardDetails(any(CardRequestBody.class))).thenReturn(false);
+
+		MvcResult result = mvc
+				.perform(post("/api/v1/card").contentType(MediaType.APPLICATION_JSON).content(creditCardRequestJson))
+				.andExpect(status().isInternalServerError()).andReturn();
+
+		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), result.getResponse().getStatus());
+	}
 
 	@Test
 	public void givenInvalidCreditCardRequest_thenReturn_400() throws Exception {
