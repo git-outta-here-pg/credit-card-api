@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.publicis.sapient.credit.card.api.component.Server;
 import com.publicis.sapient.credit.card.api.dto.CardRequestBody;
 import com.publicis.sapient.credit.card.api.dto.CardResponseBody;
+import com.publicis.sapient.credit.card.api.dto.PostResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,13 +38,16 @@ public class CreditCardController {
 
 	
 	@PostMapping(value = "/card", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Boolean> pushData(@Valid @RequestBody CardRequestBody cardRequestBody) {
+	public ResponseEntity<PostResponse> pushData(@Valid @RequestBody CardRequestBody cardRequestBody) {
 
 		log.info("Card information received.");
-
-		boolean success = server.saveCardDetails(cardRequestBody);
-
-		return new ResponseEntity<>(success, HttpStatus.CREATED);
+		PostResponse postResponse = new PostResponse();
+		if (server.saveCardDetails(cardRequestBody)) {
+			postResponse.setResponse("Card added successfully");
+		} else {
+			postResponse.setResponse("Card was not added");
+		}
+		return new ResponseEntity<>(postResponse, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/cards", produces = MediaType.APPLICATION_JSON_VALUE)

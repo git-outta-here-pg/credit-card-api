@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.publicis.sapient.credit.card.api.exception.ApiError;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,27 +30,26 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler(value = { ConstraintViolationException.class })
 	protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
 
-		String bodyOfResponse = "Provided input parameters have not met validation requirements";
-
-		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		String error = "Provided input parameters have not met validation requirements";
+		return new ResponseEntity<>(constructApiError(error), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(value = { DataIntegrityViolationException.class })
 	protected ResponseEntity<Object> handleDataIntegrityViolationException(Exception ex, WebRequest request) {
 
-		String bodyOfResponse = "Provided credit card already exists in the system";
-
-		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
+		String error = "Provided credit card already exists in the system";
+		return new ResponseEntity<>(constructApiError(error), HttpStatus.CONFLICT);
 	}
 
 	@Override
 	@ExceptionHandler(ValidationException.class)
 	public final ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
 		List<String> errors = new ArrayList<>();
 		for (FieldError error : ex.getBindingResult().getFieldErrors())
 			errors.add(error.getField() + " - " + error.getDefaultMessage());
-		ApiError apiError = new ApiError(LocalDateTime.now(), "Valdation Error!", errors);
+		ApiError apiError = new ApiError("Valdation Error!", errors);
 
 		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 	}
@@ -59,12 +57,15 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
 		String error = "Malformed JSON request";
+		return new ResponseEntity<>(constructApiError(error), HttpStatus.BAD_REQUEST);
+	}
+
+	private ApiError constructApiError(String error) {
 		List<String> errors = new ArrayList<>();
 		errors.add(error);
-		ApiError apiError = new ApiError(LocalDateTime.now(), "Valdation Error!", errors);
-
-		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+		return new ApiError("Error!", errors);
 	}
 
 }

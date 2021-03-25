@@ -12,6 +12,8 @@ public class ErrorsAndExceptions {
 
 	public static final String INVALID_INPUT = "cannot be empty or null";
 
+	public static final String INVALID_CARD_LENGTH = "Credit card number's length is invalid";
+
 	public static final String INVALID_CARD_NUMBER = "Credit card number is invalid";
 
 	public static final String INVALID_CARD_LIMIT = "Card limit must be greater than 100 GBP";

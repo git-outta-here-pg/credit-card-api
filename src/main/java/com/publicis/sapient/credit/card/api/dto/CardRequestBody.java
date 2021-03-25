@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 public class CardRequestBody {
 
 	@NotBlank(message = ErrorsAndExceptions.INVALID_INPUT)
-	@Size(min = 13, max = 19, message = ErrorsAndExceptions.INVALID_CARD_NUMBER)
+	@Size(min = 13, max = 19, message = ErrorsAndExceptions.INVALID_CARD_LENGTH)
 	@CardNumberValidator
 	private String creditCardNumber;
 

@@ -28,7 +28,6 @@ import com.publicis.sapient.credit.card.api.component.Server;
 import com.publicis.sapient.credit.card.api.dto.CardRequestBody;
 import com.publicis.sapient.credit.card.api.dto.CardResponseBody;
 import com.publicis.sapient.credit.card.api.model.CardProcessor;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -70,9 +69,6 @@ public class CreditCardControllerTest {
 				.andExpect(status().isCreated()).andReturn();
 
 		assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
-
-		boolean response = Boolean.parseBoolean(result.getResponse().getContentAsString());
-		assertThat(response).isTrue();
 	}
 
 	@Test
