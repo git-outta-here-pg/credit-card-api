@@ -24,9 +24,9 @@ Two REST Endpoints are be implemented
 - The unit test are written using Junit4
 - I have added a sql file by name schema.sql, which has the table creation commands
 
-Sample POST payload 
+```Sample POST payload 
 POST endpoint - http://localhost:8090/api/v1/card
-```Request -
+Request -
 {
   "creditCardNumber": "5196081888500645",
   "cardHolderName": "Poonam",
