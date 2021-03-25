@@ -1,6 +1,6 @@
 # credit-card-api
 
-Thank you for this opportunity. I really enjoyed implementing it. This implementation covers the primary requirements listed, and I will go into the details in a bit. I would like to talk about my design consideration and would like to also list down my assumptions :
+This implementation covers the primary requirements listed, and I will go into the details in a bit. Let's begin with my design considerations and I'd also like to list down my assumptions :
  - Based on the requirement I can identify two entities, CARD and USER. Each USER can have many CARDS. CARDS are unique in the system and I have used credit card number as UNIQUE KEY in the CREDIT_CARD_STORE table, to avoid any duplicates. To limit the scope of implementation I have kept the USER_STORE table fairly lean and simple. Though if I have to extend this system, I would collect a unqiue identifier for the user and maintain the USER to CARD relationship. This will help with redundancy and also help with unique user identification.
  - From regulatory point of view, Credit Card Number, CVV are categorised as PII or PCI and I would not store this information in database as plain text. I would implement an encrypt and decrypt function that would be used to encrypt the information before it is stored and decrypt when it needs to be presented on the UI (would hide some digits on the UI as well and not return the complete credit card number). The key for encrypting and decrypting would be managed by Hashicorp Vault or any other equivalent technology. Again to implement the scope of work involved, I am currently storing the dummy values as plain text in the database
  - For the limiting the scope of work to be done - I have assumed that every time a request to add a new card is received, regardless if the user exists in the system, a new entry is added in the CREDIT_CARD_STORE (provided the credit card number is unique) and corresponding USER_TABLE
@@ -24,5 +24,4 @@ Two REST Endpoints are be implemented
 - The unit test are written using Junit4
 - I have added a sql file by name schema.sql, which has the table creation commands
 
-Thanks again
-Poonam
+Thanks 
